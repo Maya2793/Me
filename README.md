@@ -51,53 +51,45 @@ System.out.println("Enter the file type (mp3, mp4, vlc):");
 
 
         //ass1-2
-
-        package Assignment1;
+ package Assignment1;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-// Component
 interface Employee {
     void showDetails();
 }
-
-// Leaf - Individual Employee
 class Worker implements Employee {
     private String name;
     private String position;
 
-    public Worker(String name, String position) {
+   public Worker(String name, String position) {
         this.name = name;
         this.position = position;
     }
-
     @Override
     public void showDetails() {
         System.out.println("Employee Name: " + name + ", Position: " + position);
     }
 }
-
-// Composite - Manager
 class Manager implements Employee {
     private String name;
     private String position;
     private List<Employee> employees = new ArrayList<>();
 
-    public Manager(String name, String position) {
+   public Manager(String name, String position) {
         this.name = name;
         this.position = position;
     }
 
-    public void addEmployee(Employee employee) {
+   public void addEmployee(Employee employee) {
         employees.add(employee);
     }
 
-    public void removeEmployee(Employee employee) {
+   public void removeEmployee(Employee employee) {
         employees.remove(employee);
     }
 
-    @Override
+   @Override
     public void showDetails() {
         System.out.println("Manager Name: " + name + ", Position: " + position);
         System.out.println("Managing:");
@@ -106,51 +98,37 @@ class Manager implements Employee {
         }
     }
 }
-
-// Main Class with User Input
 public class CompositePatternDemo {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         List<Employee> allEmployees = new ArrayList<>();
-
         System.out.println("Welcome to the Employee Management System!");
-
-        // Loop to enter employees and managers
         while (true) {
             System.out.print("Enter type of employee (worker/manager/exit): ");
             String type = scanner.nextLine().trim().toLowerCase();
-
             if (type.equals("exit")) {
                 break;
             }
-
             System.out.print("Enter employee name: ");
             String name = scanner.nextLine();
-
             System.out.print("Enter employee position: ");
             String position = scanner.nextLine();
-
             if (type.equals("worker")) {
                 Worker worker = new Worker(name, position);
                 allEmployees.add(worker);
             } else if (type.equals("manager")) {
                 Manager manager = new Manager(name, position);
                 allEmployees.add(manager);
-
-                // Manager can have subordinates (employees)
-                while (true) {
+              while (true) {
                     System.out.print("Does the manager have a subordinate (yes/no)? ");
                     String hasSubordinate = scanner.nextLine().trim().toLowerCase();
                     if (hasSubordinate.equals("no")) {
                         break;
                     }
-
                     System.out.print("Enter subordinate name: ");
                     String subName = scanner.nextLine();
-
                     System.out.print("Enter subordinate position: ");
                     String subPosition = scanner.nextLine();
-
                     Worker subordinate = new Worker(subName, subPosition);
                     manager.addEmployee(subordinate);
                 }
@@ -158,14 +136,11 @@ public class CompositePatternDemo {
                 System.out.println("Invalid input. Please enter 'worker' or 'manager'.");
             }
         }
-
-        // Display all employees
         System.out.println("\nAll Employees and Managers:");
         for (Employee employee : allEmployees) {
             employee.showDetails();
         }
-
-        scanner.close();
+scanner.close();
     }
 }
 
