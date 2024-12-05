@@ -144,3 +144,103 @@ scanner.close();
     }
 }
 
+
+
+//ass1 bridge
+
+
+package Assignment1;
+import java.util.Scanner;
+interface DrawingAPI { void drawCircle(double x, double y, double radius); void drawRectangle(double x, double y, double width, double height);}
+class DrawingAPI1 implements DrawingAPI {
+@Override
+public void drawCircle(double x, double y, double radius) {
+System.out.println("Drawing Circle [API1] at (" + x + ", " + y + ") with radius " + radius);
+} @Override
+public void drawRectangle(double x, double y, double width, double height) {
+System.out.println("Drawing Rectangle [API1] at (" + x + ", " + y + ") with width " + width + " and height " + height); }
+}
+class DrawingAPI2 implements DrawingAPI {
+ @Override   public void drawCircle(double x, double y, double radius) {
+System.out.println("Drawing Circle [API2] at (" + x + ", " + y + ") with radius " + radius);
+    }
+   @Override
+public void drawRectangle(double x, double y, double width, double height) {
+ System.out.println("Drawing Rectangle [API2] at (" + x + ", " + y + ") with width " + width + " and height " + height);
+    }}
+abstract class Shape {
+protected DrawingAPI drawingAPI;  protected Shape(DrawingAPI drawingAPI) {
+this.drawingAPI = drawingAPI;
+    }
+
+ public abstract void draw();
+ public abstract void resize(double factor);
+}
+class Circle extends Shape {
+    private double x, y, radius;
+    public Circle(double x, double y, double radius, DrawingAPI drawingAPI) {
+        super(drawingAPI);
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+    }
+    @Override
+    public void draw() {
+        drawingAPI.drawCircle(x, y, radius);
+    }
+    @Override
+    public void resize(double factor) {
+        radius *= factor;
+    }
+}
+
+class Rectangle extends Shape {
+    private double x, y, width, height;
+    public Rectangle(double x, double y, double width, double height, DrawingAPI drawingAPI) {
+        super(drawingAPI);
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+}@Override    public void draw() {
+        drawingAPI.drawRectangle(x, y, width, height);
+    }
+   @Override
+    public void resize(double factor) {
+        width *= factor;
+        height *= factor;
+    }
+}
+
+
+public class BridgePattern {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose a Drawing API (1 or 2):");
+        int apiChoice = scanner.nextInt();
+DrawingAPI drawingAPI = (apiChoice == 1) ? new DrawingAPI1() : new DrawingAPI2();        System.out.println("Choose a shape (circle or rectangle):");
+        String shapeType = scanner.next();
+
+Shape shape;
+        if (shapeType.equalsIgnoreCase("circle")) {
+            System.out.println("Enter x, y, and radius:");
+            double x = scanner.nextDouble();
+            double y = scanner.nextDouble();
+            double radius = scanner.nextDouble();
+            shape = new Circle(x, y, radius, drawingAPI);
+        } else if (shapeType.equalsIgnoreCase("rectangle")) {
+            System.out.println("Enter x, y, width, and height:");
+            double x = scanner.nextDouble();
+            double y = scanner.nextDouble();
+            double width = scanner.nextDouble();
+            double height = scanner.nextDouble();
+            shape = new Rectangle(x, y, width, height, drawingAPI);
+        } else {
+            System.out.println("Invalid shape type.");
+            scanner.close();            return;
+}        shape.draw();
+
+System.out.println("Enter a resize factor:");
+        double factor = scanner.nextDouble();
+        shape.resize(factor);        shape.draw();
+scanner.close();}}
